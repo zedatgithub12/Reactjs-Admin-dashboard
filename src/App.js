@@ -24,14 +24,8 @@ const AuthRegister = Loadable(lazy(() => import('views/pages/authentication/auth
 const App = () => {
     const customization = useSelector((state) => state.customization);
     const location = useLocation();
-    const [login, setLogin] = useState(false);
-    useEffect(() => {
-        var tokens = sessionStorage.getItem('token');
-        if (tokens !== null) {
-            setLogin(true);
-        }
-        return () => {};
-    }, [login]);
+    const [loged, setLoged] = useState(false);
+
     const authContext = useMemo(
         () => ({
             SignIn: async (status, users) => {
@@ -70,13 +64,22 @@ const App = () => {
         }),
         []
     );
+
+    useEffect(() => {
+        var tokens = sessionStorage.getItem('token');
+        if (tokens !== null) {
+            setLoged(true);
+        }
+        return () => {};
+    }, [loged]);
+
     return (
         <StyledEngineProvider injectFirst>
             <AuthContext.Provider value={authContext}>
                 <ThemeProvider theme={themes(customization)}>
                     <CssBaseline />
                     <NavigationScroll>
-                        {login ? <Routes /> : location.pathname === '/pages/register/register' ? <AuthRegister /> : <AuthLogin />}
+                        {loged ? <Routes /> : location.pathname === '/pages/register/register' ? <AuthRegister /> : <AuthLogin />}
                     </NavigationScroll>
                 </ThemeProvider>
             </AuthContext.Provider>

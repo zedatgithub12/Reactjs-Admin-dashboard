@@ -1,6 +1,9 @@
 const Connections = {
     url: 'http://localhost:3000',
-    login: '/login'
+    api: 'http://localhost:8000/api/',
+    images: 'http://localhost:8000/api/images/',
+    // images: 'https://addischircharo.com/backend/api/images/',
+    signin: 'signin'
 };
 
 export default Connections;

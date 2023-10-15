@@ -99,18 +99,18 @@ const NotificationSection = () => {
                     }
                 }}
             >
-                <ButtonBase sx={{ borderRadius: '12px' }}>
+                <ButtonBase sx={{ borderRadius: '30px' }}>
                     <Avatar
                         variant="rounded"
                         sx={{
                             ...theme.typography.commonAvatar,
                             ...theme.typography.mediumAvatar,
                             transition: 'all .2s ease-in-out',
-                            background: theme.palette.secondary.light,
+                            background: theme.palette.background.default,
                             color: theme.palette.secondary.dark,
                             '&[aria-controls="menu-list-grow"],&:hover': {
-                                background: theme.palette.secondary.dark,
-                                color: theme.palette.secondary.light
+                                background: theme.palette.background.default,
+                                color: theme.palette.secondary.dark
                             }
                         }}
                         ref={anchorRef}
@@ -119,7 +119,7 @@ const NotificationSection = () => {
                         onClick={handleToggle}
                         color="inherit"
                     >
-                        <IconBell stroke={1.5} size="1.3rem" />
+                        <IconBell stroke={1.5} size="1.6rem" />
                     </Avatar>
                 </ButtonBase>
             </Box>
