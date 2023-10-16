@@ -20,10 +20,16 @@ import { useMemo } from 'react';
 import Loadable from 'ui-component/Loadable';
 const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login')));
 const AuthRegister = Loadable(lazy(() => import('views/pages/authentication/authentication3/Register')));
+const Forgot_Password = Loadable(lazy(() => import('views/pages/authentication/forgot-password')));
+const Reset_Password = Loadable(lazy(() => import('views/pages/authentication/reset-password')));
 
 const App = () => {
     const customization = useSelector((state) => state.customization);
     const location = useLocation();
+    const path = location.pathname;
+    const tokenIndex = path.lastIndexOf('/') + 1;
+    const token = path.substring(tokenIndex);
+
     const [loged, setLoged] = useState(false);
 
     const authContext = useMemo(
@@ -79,7 +85,21 @@ const App = () => {
                 <ThemeProvider theme={themes(customization)}>
                     <CssBaseline />
                     <NavigationScroll>
-                        {loged ? <Routes /> : location.pathname === '/pages/register/register' ? <AuthRegister /> : <AuthLogin />}
+                        {loged ? (
+                            <Routes />
+                        ) : location.pathname === '/pages/register/register' ? (
+                            <AuthRegister />
+                        ) : location.pathname === '/forgot-password' ? (
+                            <Forgot_Password />
+                        ) : location.pathname === `/reset-password/${token}` ? (
+                            <Reset_Password />
+                        ) : location.pathname === '/pages/login/login' ? (
+                            <AuthLogin />
+                        ) : location.pathname === '/' ? (
+                            <AuthLogin />
+                        ) : (
+                            <NotFound />
+                        )}
                     </NavigationScroll>
                 </ThemeProvider>
             </AuthContext.Provider>

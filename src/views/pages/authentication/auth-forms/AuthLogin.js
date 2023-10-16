@@ -34,7 +34,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { AuthContext } from 'context/context';
 import Connections from 'api/connections';
-
+import { useNavigate } from 'react-router-dom';
 // import Google from 'assets/images/icons/social-google.svg';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
@@ -44,6 +44,7 @@ const FirebaseLogin = ({ ...others }) => {
     const Sign = (status, user) => {
         SignIn(status, user);
     };
+    const navigate = useNavigate();
     const theme = useTheme();
     const scriptedRef = useScriptRef();
     // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
@@ -255,7 +256,12 @@ const FirebaseLogin = ({ ...others }) => {
                                 }
                                 label="Remember me"
                             />
-                            <Typography variant="subtitle1" color="dark" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
+                            <Typography
+                                variant="subtitle1"
+                                color="dark"
+                                sx={{ textDecoration: 'none', cursor: 'pointer' }}
+                                onClick={() => navigate('/forgot-password')}
+                            >
                                 Forgot Password?
                             </Typography>
                         </Stack>

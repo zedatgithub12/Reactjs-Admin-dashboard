@@ -9,6 +9,8 @@ const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')))
 
 //account routing
 const AccountSetting = Loadable(lazy(() => import('views/profile/account-setting')));
+const Changepassword = Loadable(lazy(() => import('views/profile/change-password')));
+
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
 const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
@@ -90,6 +92,10 @@ const MainRoutes = {
         {
             path: 'account-setting',
             element: <AccountSetting />
+        },
+        {
+            path: 'change-password',
+            element: <Changepassword />
         }
     ]
 };
