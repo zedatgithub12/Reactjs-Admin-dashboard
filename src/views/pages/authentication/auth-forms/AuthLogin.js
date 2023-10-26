@@ -7,6 +7,7 @@ import {
     Box,
     Button,
     Checkbox,
+    CircularProgress,
     FormControl,
     FormControlLabel,
     FormHelperText,
@@ -32,8 +33,8 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { AuthContext } from 'context/context';
-import Connections from 'api/connections';
-
+import Connections from 'api';
+import { useNavigate } from 'react-router-dom';
 // import Google from 'assets/images/icons/social-google.svg';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
@@ -43,12 +44,13 @@ const FirebaseLogin = ({ ...others }) => {
     const Sign = (status, user) => {
         SignIn(status, user);
     };
+    const navigate = useNavigate();
     const theme = useTheme();
     const scriptedRef = useScriptRef();
     // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     // const customization = useSelector((state) => state.customization);
     const [checked, setChecked] = useState(true);
-
+    const [logSpinner, setLogSpinner] = useState(false);
     // const googleHandler = async () => {
     //     console.error('Login');
     // };
@@ -147,7 +149,7 @@ const FirebaseLogin = ({ ...others }) => {
                             setSubmitting(false);
                         }
                     }
-                    var Api = Connections.url + Connections.login;
+                    var Api = Connections.api + Connections.signin;
                     var headers = {
                         accept: 'application/json',
                         'Content-Type': 'application/json'
@@ -157,7 +159,7 @@ const FirebaseLogin = ({ ...others }) => {
                         email: values.email,
                         password: values.password
                     };
-
+                    setLogSpinner(true);
                     fetch(Api, {
                         method: 'POST',
                         headers: headers,
@@ -165,18 +167,16 @@ const FirebaseLogin = ({ ...others }) => {
                     })
                         .then((response) => response.json())
                         .then((response) => {
-                            if (!(response == '83')) {
+                            if (response.success) {
                                 setStatus({ success: true });
                                 setSubmitting(false);
                                 Sign('Signed', response);
-                            } else if (response.status == '83') {
-                                setStatus({ success: false });
-                                setErrors({ submit: err.message });
-                                setSubmitting(false);
+                                setLogSpinner(false);
                             } else {
                                 setStatus({ success: false });
-                                setErrors({ submit: err.message });
+                                setErrors({ submit: response.message });
                                 setSubmitting(false);
+                                setLogSpinner(false);
                             }
                         })
                         .catch((err) => {
@@ -184,6 +184,7 @@ const FirebaseLogin = ({ ...others }) => {
                             setStatus({ success: false });
                             setErrors({ submit: err.message });
                             setSubmitting(false);
+                            setLogSpinner(false);
                         });
                 }}
             >
@@ -250,12 +251,17 @@ const FirebaseLogin = ({ ...others }) => {
                                         checked={checked}
                                         onChange={(event) => setChecked(event.target.checked)}
                                         name="checked"
-                                        color="primary"
+                                        color="success"
                                     />
                                 }
                                 label="Remember me"
                             />
-                            <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
+                            <Typography
+                                variant="subtitle1"
+                                color="dark"
+                                sx={{ textDecoration: 'none', cursor: 'pointer' }}
+                                onClick={() => navigate('/forgot-password')}
+                            >
                                 Forgot Password?
                             </Typography>
                         </Stack>
@@ -274,9 +280,13 @@ const FirebaseLogin = ({ ...others }) => {
                                     size="large"
                                     type="submit"
                                     variant="contained"
-                                    color="secondary"
+                                    color="success"
                                 >
-                                    Sign in
+                                    {logSpinner ? (
+                                        <CircularProgress size={22} sx={{ color: theme.palette.background.default }} />
+                                    ) : (
+                                        'Sign in'
+                                    )}
                                 </Button>
                             </AnimateButton>
                         </Box>

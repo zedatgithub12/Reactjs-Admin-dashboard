@@ -20,24 +20,29 @@ import { useMemo } from 'react';
 import Loadable from 'ui-component/Loadable';
 const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login')));
 const AuthRegister = Loadable(lazy(() => import('views/pages/authentication/authentication3/Register')));
+const Forgot_Password = Loadable(lazy(() => import('views/pages/authentication/forgot-password')));
+const Reset_Password = Loadable(lazy(() => import('views/pages/authentication/reset-password')));
+const NotFound = Loadable(lazy(() => import('views/notfound')));
 
 const App = () => {
     const customization = useSelector((state) => state.customization);
     const location = useLocation();
-    const [login, setLogin] = useState(false);
-    useEffect(() => {
-        var tokens = sessionStorage.getItem('token');
-        if (tokens !== null) {
-            setLogin(true);
-        }
-        return () => {};
-    }, [login]);
+    const path = location.pathname;
+    const tokenIndex = path.lastIndexOf('/') + 1;
+    const token = path.substring(tokenIndex);
+
+    const [loged, setLoged] = useState(false);
+
     const authContext = useMemo(
         () => ({
             SignIn: async (status, users) => {
                 if (status === 'Signed') {
+                    const ttl = new Date(users.expires_in * 1000); // TTL in seconds
+                    const expirationTime = ttl.getTime(); // Calculate expiration time in milliseconds
+
                     sessionStorage.setItem('user', JSON.stringify(users));
-                    sessionStorage.setItem('token', JSON.stringify(users.fname));
+                    sessionStorage.setItem('token', users.token);
+                    sessionStorage.setItem('tokenExpiration', expirationTime);
 
                     setLoged(true);
                 } else {
@@ -70,13 +75,36 @@ const App = () => {
         }),
         []
     );
+
+    useEffect(() => {
+        var tokens = sessionStorage.getItem('token');
+        if (tokens !== null) {
+            setLoged(true);
+        }
+        return () => {};
+    }, [loged]);
+
     return (
         <StyledEngineProvider injectFirst>
             <AuthContext.Provider value={authContext}>
                 <ThemeProvider theme={themes(customization)}>
                     <CssBaseline />
                     <NavigationScroll>
-                        {login ? <Routes /> : location.pathname === '/pages/register/register' ? <AuthRegister /> : <AuthLogin />}
+                        {loged ? (
+                            <Routes />
+                        ) : location.pathname === '/pages/register/register' ? (
+                            <AuthRegister />
+                        ) : location.pathname === '/forgot-password' ? (
+                            <Forgot_Password />
+                        ) : location.pathname === `/reset-password/${token}` ? (
+                            <Reset_Password />
+                        ) : location.pathname === '/pages/login/login' ? (
+                            <AuthLogin />
+                        ) : location.pathname === '/' ? (
+                            <AuthLogin />
+                        ) : (
+                            <NotFound />
+                        )}
                     </NavigationScroll>
                 </ThemeProvider>
             </AuthContext.Provider>
