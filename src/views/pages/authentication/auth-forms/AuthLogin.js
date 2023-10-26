@@ -33,7 +33,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { AuthContext } from 'context/context';
-import Connections from 'api/connections';
+import Connections from 'api';
 import { useNavigate } from 'react-router-dom';
 // import Google from 'assets/images/icons/social-google.svg';
 

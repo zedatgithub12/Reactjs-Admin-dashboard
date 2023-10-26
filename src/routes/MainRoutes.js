@@ -7,6 +7,9 @@ import Loadable from 'ui-component/Loadable';
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
+//Products Routing
+const Products = Loadable(lazy(() => import('views/products')));
+
 //account routing
 const AccountSetting = Loadable(lazy(() => import('views/profile/account-setting')));
 const Changepassword = Loadable(lazy(() => import('views/profile/change-password')));
@@ -96,6 +99,11 @@ const MainRoutes = {
         {
             path: 'change-password',
             element: <Changepassword />
+        },
+
+        {
+            path: 'products',
+            element: <Products />
         }
     ]
 };

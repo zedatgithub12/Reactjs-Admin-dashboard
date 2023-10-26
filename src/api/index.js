@@ -5,7 +5,10 @@ const Connections = {
     // images: 'https://addischircharo.com/backend/api/images/',
     signin: 'signin',
     forgotpassword: 'forgotpassword',
-    resetpassword: 'resetpassword'
+    resetpassword: 'resetpassword',
+    refresh_token: 'refresh-token',
+
+    main_cat: 'main-categories'
 };
 
 export default Connections;

@@ -25,7 +25,7 @@ import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
 // assets
-import Connections from 'api/connections';
+import Connections from 'api';
 import { IconCircleCheck } from '@tabler/icons';
 import AuthWrapper1 from './AuthWrapper1';
 import AuthCardWrapper from './AuthCardWrapper';

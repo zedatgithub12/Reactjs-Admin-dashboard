@@ -23,7 +23,7 @@ const dashboard = {
             id: 'items',
             title: 'Products',
             type: 'item',
-            url: '/sample-page',
+            url: '/products',
             icon: icons.IconClipboardList,
             breadcrumbs: false
         },
