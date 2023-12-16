@@ -1,8 +1,8 @@
 {
-    "name": "reactjs-dashboard",
+    "name": "sheketdelivery",
     "version": "1.0",
     "private": true,
-    "homepage": "https://wulo.sheketdelivery.com",
+    "homepage": "https://admin.sheketdelivery.com",
     "dependencies": {
         "@emotion/cache": "^11.9.3",
         "@emotion/react": "^11.9.3",

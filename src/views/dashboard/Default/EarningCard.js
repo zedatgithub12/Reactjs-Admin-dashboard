@@ -99,14 +99,14 @@ const EarningCard = ({ isLoading }) => {
                                                 ...theme.typography.commonAvatar,
                                                 ...theme.typography.mediumAvatar,
                                                 backgroundColor: theme.palette.secondary.dark,
-                                                color: theme.palette.secondary[200],
+                                                color: theme.palette.grey[200],
                                                 zIndex: 1
                                             }}
                                             aria-controls="menu-earning-card"
                                             aria-haspopup="true"
                                             onClick={handleClick}
                                         >
-                                            <MoreHorizIcon fontSize="inherit" />
+                                            <MoreHorizIcon fontSize="inherit" sx={{ color: theme.palette.grey[300] }} />
                                         </Avatar>
                                         <Menu
                                             id="menu-earning-card"
@@ -143,8 +143,17 @@ const EarningCard = ({ isLoading }) => {
                             <Grid item>
                                 <Grid container alignItems="center">
                                     <Grid item>
-                                        <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                            $500.00
+                                        <Typography
+                                            sx={{
+                                                color: theme.palette.grey[600],
+                                                fontSize: '2.125rem',
+                                                fontWeight: 500,
+                                                mr: 1,
+                                                mt: 1.75,
+                                                mb: 0.75
+                                            }}
+                                        >
+                                            50.0M
                                         </Typography>
                                     </Grid>
                                     <Grid item>
@@ -153,7 +162,7 @@ const EarningCard = ({ isLoading }) => {
                                                 cursor: 'pointer',
                                                 ...theme.typography.smallAvatar,
                                                 backgroundColor: theme.palette.secondary[200],
-                                                color: theme.palette.secondary.dark
+                                                color: theme.palette.grey[600]
                                             }}
                                         >
                                             <ArrowUpwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
@@ -166,7 +175,7 @@ const EarningCard = ({ isLoading }) => {
                                     sx={{
                                         fontSize: '1rem',
                                         fontWeight: 500,
-                                        color: theme.palette.secondary[200]
+                                        color: theme.palette.grey[600]
                                     }}
                                 >
                                     Total Earning

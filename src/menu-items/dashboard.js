@@ -21,7 +21,7 @@ const dashboard = {
         },
         {
             id: 'items',
-            title: 'Products',
+            title: 'Items',
             type: 'item',
             url: '/products',
             icon: icons.IconClipboardList,
