@@ -3,12 +3,14 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
+import Categories from 'views/products/category';
+import SubCategories from 'views/products/subcategory';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
-//Products Routing
-const Products = Loadable(lazy(() => import('views/products')));
+//market status
+const Pricing = Loadable(lazy(() => import('views/pricing')));
 
 //account routing
 const AccountSetting = Loadable(lazy(() => import('views/profile/account-setting')));
@@ -20,6 +22,12 @@ const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
 const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
 const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
+
+// Product routing
+const Products = Loadable(lazy(() => import('views/products/products')));
+const AddProduct = Loadable(lazy(() => import('views/products/products/addProduct')));
+const ViewProduct = Loadable(lazy(() => import('views/products/products/viewProduct')));
+const UpdateProduct = Loadable(lazy(() => import('views/products/products/updateProduct')));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -104,6 +112,34 @@ const MainRoutes = {
         {
             path: 'products',
             element: <Products />
+        },
+        {
+            path: 'pricing',
+            element: <Pricing />
+        },
+        {
+            path: 'products/category',
+            element: <Categories />
+        },
+        {
+            path: 'products/sub-category',
+            element: <SubCategories />
+        },
+        {
+            path: 'products',
+            element: <Products />
+        },
+        {
+            path: 'add-product',
+            element: <AddProduct />
+        },
+        {
+            path: 'view-product',
+            element: <ViewProduct />
+        },
+        {
+            path: 'update-product',
+            element: <UpdateProduct />
         }
     ]
 };

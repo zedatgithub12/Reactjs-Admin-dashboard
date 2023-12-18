@@ -1,5 +1,6 @@
 // material-ui
-import { Button, Box, CircularProgress, Typography } from '@mui/material';
+
+import { Grid, Typography } from '@mui/material';
 import Connections from 'api';
 import { useEffect, useState } from 'react';
 
@@ -61,20 +62,21 @@ const Products = () => {
     }, [refreshed]);
 
     return (
-        <MainCard title="Products Card">
-            <Typography variant="body2">List of products found in the database</Typography>
-            <Button onClick={() => handleCategoryFetching()}> {isLoading ? <CircularProgress /> : 'Fetch Main Catgeories'} </Button>
-            <Box>
-                {Catgeories.length > 0 ? (
-                    <Box>
-                        {Catgeories.map((category, index) => (
-                            <Typography key={index}>{category.name}</Typography>
-                        ))}{' '}
-                    </Box>
-                ) : (
-                    <Typography>NO Category to list </Typography>
-                )}
-            </Box>
+        <MainCard>
+            <Grid container>
+                <Grid item xs={12}>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Typography variant="h3">Page </Typography>
+                        </Grid>
+                    </Grid>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Typography variant="body2">Body of content</Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
         </MainCard>
     );
 };

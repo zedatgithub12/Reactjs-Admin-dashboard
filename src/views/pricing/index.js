@@ -3,7 +3,7 @@ import { Grid, Typography } from '@mui/material';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
-const SamplePage = () => (
+const Pricing = () => (
     <Grid container>
         <Grid item xs={12}>
             <Grid container>
@@ -20,4 +20,4 @@ const SamplePage = () => (
     </Grid>
 );
 
-export default SamplePage;
+export default Pricing;
