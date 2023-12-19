@@ -9,9 +9,6 @@ import SubCategories from 'views/products/subcategory';
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
-//market status
-const Pricing = Loadable(lazy(() => import('views/pricing')));
-
 //account routing
 const AccountSetting = Loadable(lazy(() => import('views/profile/account-setting')));
 const Changepassword = Loadable(lazy(() => import('views/profile/change-password')));
@@ -113,10 +110,7 @@ const MainRoutes = {
             path: 'products',
             element: <Products />
         },
-        {
-            path: 'pricing',
-            element: <Pricing />
-        },
+
         {
             path: 'products/category',
             element: <Categories />

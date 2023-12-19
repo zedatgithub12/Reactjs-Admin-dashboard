@@ -51,10 +51,10 @@ const dashboard = {
             ]
         },
         {
-            id: 'pricing',
+            id: 'pricing-changes',
             title: 'Item Prices',
             type: 'item',
-            url: '/pricing',
+            url: '/pricing-changes',
             icon: icons.IconActivity,
             breadcrumbs: false
         },
