@@ -1,3 +1,4 @@
+import { useState } from 'react';
 // material-ui
 import { Grid, useMediaQuery, useTheme } from '@mui/material';
 import PriceChangeHeader from './components/header';
@@ -8,6 +9,12 @@ import PriceChangeBody from './components/body';
 const PriceChange = () => {
     const theme = useTheme();
     const bigDevice = useMediaQuery(theme.breakpoints.up('md'));
+    const [todays, setTodays] = useState(false);
+
+    const handleView = () => {
+        setTodays(!todays);
+    };
+
     return (
         <Grid
             container
@@ -32,8 +39,8 @@ const PriceChange = () => {
                     backgroundColor: theme.palette.background.default
                 }}
             >
-                <PriceChangeHeader />
-                <PriceChangeBody />
+                <PriceChangeHeader todays={todays} onToday={handleView} />
+                <PriceChangeBody todays={todays} />
             </Grid>
         </Grid>
     );

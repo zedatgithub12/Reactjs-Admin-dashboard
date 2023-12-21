@@ -1,7 +1,8 @@
 import { Box, Button, Grid, Typography, useTheme } from '@mui/material';
 import Logo from 'ui-component/Logo';
+import PropTypes from 'prop-types';
 
-const PriceChangeHeader = () => {
+const PriceChangeHeader = ({ todays, onToday }) => {
     const theme = useTheme();
     return (
         <Grid container>
@@ -27,12 +28,16 @@ const PriceChangeHeader = () => {
                 <Typography variant="h2" color={'white'}>
                     የዋጋ ዝርዝር
                 </Typography>
-                <Button variant="outlined" color="secondary">
-                    የዛሬን ብቻ
+                <Button variant={todays ? 'contained' : 'outlined'} color="secondary" onClick={onToday}>
+                    የዛሬ ለዉጥ
                 </Button>
             </Grid>
         </Grid>
     );
 };
 
+PriceChangeHeader.propTypes = {
+    todays: PropTypes.bool,
+    onToday: PropTypes.func
+};
 export default PriceChangeHeader;

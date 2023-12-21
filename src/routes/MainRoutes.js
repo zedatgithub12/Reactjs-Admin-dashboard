@@ -5,6 +5,7 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import Categories from 'views/products/category';
 import SubCategories from 'views/products/subcategory';
+import PriceChangeRecords from 'views/price-change/details';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -134,6 +135,11 @@ const MainRoutes = {
         {
             path: 'update-product',
             element: <UpdateProduct />
+        },
+
+        {
+            path: 'change-records',
+            element: <PriceChangeRecords />
         }
     ]
 };

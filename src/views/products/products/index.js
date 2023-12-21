@@ -140,7 +140,7 @@ const Products = () => {
 
                         <Grid item>
                             <Button component={Link} to="/add-product" variant="outlined" color="primary" sx={{ textDecoration: 'none' }}>
-                                Create New Product
+                                Create New Item
                             </Button>
                         </Grid>
                     </Grid>

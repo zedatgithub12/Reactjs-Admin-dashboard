@@ -4,29 +4,54 @@ import { useQuery } from 'react-query';
 import ItemTabs from './tabs';
 import Connections from 'api';
 import AllItems from './allItems';
+import TodaysUpdate from './todaysupdate';
 
-const PriceChangeBody = () => {
+const PriceChangeBody = ({ todays }) => {
     const [loading, setLoading] = useState(false);
     const [maincategory, setCategory] = useState([]);
     const [itemLoading, setItemLoading] = useState(false);
     const [Items, setItems] = useState([]);
     const [value, setValue] = useState(0);
-
+    const [todaysData, setTodaysData] = useState(false);
+    const [paginationModel, setPaginationModel] = useState({
+        pagesize: 10,
+        page: 1
+    });
     const [popup, setPopup] = useState({
         status: false,
         severity: 'info',
         message: ''
     });
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setPopup({
-            ...popup,
-            status: false
-        });
+    const FetchTodaysUpdate = () => {
+        setItemLoading(true);
+        var Api = Connections.api + Connections.todayupdates + `?page=${paginationModel.page}&limit=${paginationModel.pagesize}`;
+        var headers = {
+            accept: 'application/json',
+            'Content-Type': 'application/json'
+        };
+        // Make the API call using fetch()
+        fetch(Api, {
+            method: 'GET',
+            headers: headers,
+            cache: 'no-cache'
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success) {
+                    setTodaysData(response.data.data);
+                    setItemLoading(false);
+                }
+            })
+            .catch(() => {
+                setPopup({
+                    ...popup,
+                    status: true,
+                    severity: 'error',
+                    message: 'There is error featching price updates!'
+                });
+                setItemLoading(false);
+            });
     };
 
     const FetchMainCategory = () => {
@@ -47,6 +72,8 @@ const PriceChangeBody = () => {
                 if (response.success) {
                     setCategory(response.data);
                     setLoading(false);
+                    let id = response.data && response.data[0].id;
+                    id && FetchItems(id);
                 }
             })
             .catch(() => {
@@ -61,6 +88,10 @@ const PriceChangeBody = () => {
     };
 
     useQuery(['data'], () => FetchMainCategory(), {
+        refetchOnWindowFocus: false
+    });
+
+    useQuery(['updates', todays], () => FetchTodaysUpdate(), {
         refetchOnWindowFocus: false
     });
 
@@ -102,8 +133,14 @@ const PriceChangeBody = () => {
     return (
         <Grid container>
             <Grid item xs={12}>
-                <ItemTabs maincategories={maincategory} value={value} handleChange={handleChange} onPressed={FetchItems} />
-                <AllItems data={Items} loading={itemLoading} />
+                {todays ? (
+                    <TodaysUpdate loading={itemLoading} data={todaysData} />
+                ) : (
+                    <>
+                        <ItemTabs maincategories={maincategory} value={value} handleChange={handleChange} onPressed={FetchItems} />
+                        <AllItems loading={itemLoading} data={Items} />
+                    </>
+                )}
             </Grid>
         </Grid>
     );

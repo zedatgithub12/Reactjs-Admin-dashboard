@@ -12,6 +12,8 @@ const Connections = {
     main_cat: 'main-categories',
     sub_cat: 'sub-categories',
     item: 'item',
+    priceupdate: 'price-updates',
+    todayupdates: 'priceupdates/todays',
 
     //category api's
     addcategory: 'addcategory',

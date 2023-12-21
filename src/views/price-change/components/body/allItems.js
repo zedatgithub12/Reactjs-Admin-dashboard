@@ -2,17 +2,44 @@ import { useState } from 'react';
 import { Box, CircularProgress, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons';
 import PropTypes from 'prop-types';
+import ItemListingOne from 'ui-component/items/Listing';
 
 const AllItems = ({ loading, data }) => {
     const theme = useTheme();
-
     const [expand, setExpand] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState(null);
 
     const handleExapnd = (itemId) => {
-        setSelectedItemId(itemId);
-        setExpand(!expand);
+        if (itemId === selectedItemId) {
+            setExpand(!expand);
+        } else {
+            setSelectedItemId(itemId);
+            setExpand(true);
+        }
     };
+
+    function isDateEqualToToday(dateString) {
+        const inputDate = new Date(dateString);
+        const today = new Date();
+
+        // Extract year, month, and day from input date
+        const inputYear = inputDate.getFullYear();
+        const inputMonth = inputDate.getMonth();
+        const inputDay = inputDate.getDate();
+
+        // Extract year, month, and day from today's date
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth();
+        const currentDay = today.getDate();
+
+        // Compare the date components
+        if (inputYear === currentYear && inputMonth === currentMonth && inputDay === currentDay) {
+            return true;
+        }
+
+        return false;
+    }
+
     return (
         <Grid container>
             <Grid item xs={12}>
@@ -31,9 +58,11 @@ const AllItems = ({ loading, data }) => {
                                 backgroundColor:
                                     expand && selectedItemId === subCat.id ? theme.palette.grey[100] : theme.palette.primary.light
                             }}
-                            onClick={() => handleExapnd(subCat.id)}
                         >
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Box
+                                sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                                onClick={() => handleExapnd(subCat.id)}
+                            >
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <IconButton onClick={() => handleExapnd(subCat.id)}>
                                         {expand && selectedItemId === subCat.id ? (
@@ -44,15 +73,25 @@ const AllItems = ({ loading, data }) => {
                                     </IconButton>
                                     <Typography variant="subtitle1">{subCat.name}</Typography>
                                 </Box>
-                                <Typography variant="body1">{subCat.items.length}</Typography>
+                                <Typography variant="body1" marginRight={2}>
+                                    {subCat.items.length} አይነት
+                                </Typography>
                             </Box>
+
                             {expand && selectedItemId === subCat.id && (
                                 <Box>
                                     {subCat.items &&
                                         subCat.items.map((item, index) => (
-                                            <Box key={index}>
-                                                <Typography variant="body2">{item.name}</Typography>
-                                            </Box>
+                                            <ItemListingOne
+                                                key={index}
+                                                image={item.picture}
+                                                brand={item.brand}
+                                                updated={isDateEqualToToday(item.updated_at)}
+                                                code={item.code}
+                                                sku={item.sku}
+                                                price={item.price}
+                                                status={item.status}
+                                            />
                                         ))}
                                 </Box>
                             )}
