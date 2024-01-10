@@ -1,11 +1,18 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { IconArrowRight } from '@tabler/icons';
 import Connections from 'api';
 import PropTypes from 'prop-types';
 
-const CombinedListing = ({ name, image, brand, updated, code, sku, oldprice, price, status, onPress }) => {
+const CombinedListing = ({ name, image, brand, updated, code, sku, oldprice, price, onPress }) => {
+    const theme = useTheme();
     const ImageApi = Connections.itempictures;
     return (
-        <Grid container bgcolor={'white'} sx={{ padding: 1, borderRadius: 2, marginTop: 1 }} onClick={onPress}>
+        <Grid
+            container
+            bgcolor={'white'}
+            sx={{ padding: 1, borderRadius: 2, border: 1, borderColor: theme.palette.primary[200] }}
+            onClick={onPress}
+        >
             <Grid item xs={12}>
                 <Grid container>
                     <Grid item xs={3}>
@@ -46,13 +53,13 @@ const CombinedListing = ({ name, image, brand, updated, code, sku, oldprice, pri
 
                             <Grid item xs={7} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
                                 {oldprice && (
-                                    <Typography variant="body2" color="grey" sx={{ textDecoration: 'line-through' }}>
+                                    <Typography variant="subtitle2" color="grey" sx={{ textDecoration: 'line-through' }}>
                                         {oldprice}
                                     </Typography>
                                 )}
-
+                                <IconArrowRight size={14} />
                                 <Typography variant="h4" color="primary">
-                                    {price} <sup>ብር</sup>
+                                    {price} Birr
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -72,8 +79,7 @@ CombinedListing.propTypes = {
     sku: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     oldprice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    onPress: PropTypes.func,
-    status: PropTypes.string
+    onPress: PropTypes.func
 };
 
 export default CombinedListing;

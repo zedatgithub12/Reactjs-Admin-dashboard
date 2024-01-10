@@ -21,7 +21,8 @@ import {
     DialogActions,
     Button,
     Box,
-    Menu
+    Menu,
+    CircularProgress
 } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -36,7 +37,9 @@ import Connections from 'api';
 import { useTheme } from '@mui/material/styles';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { ActivityIndicators } from 'ui-component/activityIndicator';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
+const Status = ['available', 'unavailable', 'pending', 'hold'];
 // ==============================|| PRODUCT PAGE ||============================== //
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -52,6 +55,13 @@ const Products = () => {
     const [totalRecords, setTotalRecords] = useState();
     const [rowsPerPage, setRowsPerPage] = useState(15);
     const [productData, setProductData] = useState([]);
+    const [searching, setSearching] = useState(false);
+    const [paginationModel, setPaginationModel] = useState({
+        pageSize: 20,
+        page: 1,
+        total: 0,
+        lastPage: 1
+    });
 
     const [loading, setLoading] = useState(true);
 
@@ -84,6 +94,38 @@ const Products = () => {
         setPage(0);
     };
 
+    const handleSearching = () => {
+        setSearching(true);
+        var Api =
+            Connections.api +
+            Connections.item +
+            '/search' +
+            `?page=${paginationModel.page}&limit=${paginationModel.pageSize}&query=${searchText}`;
+
+        const token = sessionStorage.getItem('token');
+        var headers = {
+            Authorization: `Bearer` + token,
+            accept: 'application/json',
+            'Content-Type': 'application/json'
+        };
+
+        fetch(Api, { method: 'GET', headers: headers })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success) {
+                    setSearching(false);
+                    setProductData(response.data.data);
+                    setTotalRecords(response.data.last_page);
+                } else {
+                    setSearching(false);
+                }
+            })
+            .catch((error) => {
+                setSearching(false);
+                handlePrompts(error, 'error');
+            });
+    };
+
     useEffect(() => {
         const getProducts = () => {
             setLoading(true);
@@ -95,8 +137,7 @@ const Products = () => {
             // Make the API call using fetch()
             fetch(Api, {
                 method: 'GET',
-                headers: headers,
-                cache: 'no-cache'
+                headers: headers
             })
                 .then((response) => response.json())
                 .then((response) => {
@@ -124,6 +165,10 @@ const Products = () => {
         getProducts();
         return () => {};
     }, [page, rowsPerPage]);
+
+    const handlePrompts = (message, variant) => {
+        enqueueSnackbar(message, { variant });
+    };
 
     return (
         <MainCard>
@@ -158,8 +203,8 @@ const Products = () => {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton>
-                                            <IconSearch />
+                                        <IconButton onClick={() => handleSearching()}>
+                                            {searching ? <CircularProgress size={18} /> : <IconSearch />}
                                         </IconButton>
                                     </InputAdornment>
                                 )
@@ -221,7 +266,7 @@ const Products = () => {
                     </Box>
                 </Grid>
             </Grid>
-
+            <SnackbarProvider maxSnack={3} />
             <Snackbar open={popup.status} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity={popup.severity} sx={{ width: '100%' }}>
                     {popup.message}
@@ -273,7 +318,7 @@ const ProductRow = ({ product }) => {
     };
 
     const handleStatusChange = (status, id) => {
-        var Api = Connections.api + Connections.updateproductstatus + id;
+        var Api = Connections.api + Connections.item + '/update-status/' + id;
         var headers = {
             accept: 'application/json',
             'Content-Type': 'application/json'
@@ -283,7 +328,7 @@ const ProductRow = ({ product }) => {
         };
         // Make the API call using fetch()
         fetch(Api, {
-            method: 'PUT',
+            method: 'POST',
             headers: headers,
             body: JSON.stringify(data)
         })
@@ -446,11 +491,15 @@ const ProductRow = ({ product }) => {
                             onClose={handleMenuClose}
                             className="shadow-sm"
                         >
-                            <MenuItem
-                                onClick={() => handleStatusChange(product.status === 'suspended' ? 'available' : 'suspended', product.id)}
-                            >
-                                {product.status === 'suspended' ? 'Available' : 'Suspended'}
-                            </MenuItem>
+                            {Status.map((item, index) => (
+                                <MenuItem
+                                    key={index}
+                                    onClick={() => handleStatusChange(item, product.id)}
+                                    sx={{ textTransform: 'capitalize' }}
+                                >
+                                    {item}
+                                </MenuItem>
+                            ))}
                         </Menu>
                     </TableCell>
                 </>

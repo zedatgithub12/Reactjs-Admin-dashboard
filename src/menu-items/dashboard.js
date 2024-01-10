@@ -63,7 +63,7 @@ const dashboard = {
             id: 'users',
             title: 'Users',
             type: 'collapse',
-            url: '/sample-page',
+            url: '/users',
             icon: icons.IconUsers,
             breadcrumbs: false,
             children: [
@@ -71,21 +71,7 @@ const dashboard = {
                     id: 'admins',
                     title: 'Admin',
                     type: 'item',
-                    url: '/icons/tabler-icons',
-                    breadcrumbs: false
-                },
-                {
-                    id: 'editor',
-                    title: 'Editors',
-                    type: 'item',
-                    url: '/icons/material-icons',
-                    breadcrumbs: false
-                },
-                {
-                    id: 'customer',
-                    title: 'Customers',
-                    type: 'item',
-                    url: '/icons/material-icons',
+                    url: '/users',
                     breadcrumbs: false
                 }
             ]

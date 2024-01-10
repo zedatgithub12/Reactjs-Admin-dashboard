@@ -1,11 +1,24 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { IconStatusChange } from '@tabler/icons';
 import Connections from 'api';
 import PropTypes from 'prop-types';
 
-const ItemListingOne = ({ image, brand, updated, code, sku, price, status }) => {
+const ItemListingOne = ({ image, brand, updated, code, sku, price, onPress, onUpdate }) => {
+    const theme = useTheme();
     const ImageApi = Connections.itempictures;
+
+    const handleIconButtonClick = (event) => {
+        event.stopPropagation();
+        onUpdate();
+    };
+
     return (
-        <Grid container bgcolor={'white'} sx={{ padding: 1, borderRadius: 2, marginTop: 1 }}>
+        <Grid
+            container
+            bgcolor={'white'}
+            sx={{ padding: 1, borderRadius: 2, marginTop: 1, border: 1, borderColor: theme.palette.primary[200] }}
+            onClick={onPress}
+        >
             <Grid item xs={12}>
                 <Grid container>
                     <Grid item xs={3}>
@@ -42,10 +55,13 @@ const ItemListingOne = ({ image, brand, updated, code, sku, price, status }) => 
                                 <Typography variant="body2">{sku}</Typography>
                             </Grid>
 
-                            <Grid item xs={4}>
+                            <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
                                 <Typography variant="h4" color="primary">
-                                    {price} ብር
+                                    {price} Birr
                                 </Typography>
+                                <IconButton onClick={handleIconButtonClick} sx={{ zIndex: 2 }}>
+                                    <IconStatusChange />
+                                </IconButton>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -62,7 +78,8 @@ ItemListingOne.propTypes = {
     code: PropTypes.number,
     sku: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    status: PropTypes.string
+    onPress: PropTypes.func,
+    onUpdate: PropTypes.func
 };
 
 export default ItemListingOne;

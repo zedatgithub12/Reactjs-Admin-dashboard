@@ -90,3 +90,25 @@ export const formatDate = (createdAt) => {
         formattedDate: formattedDate
     };
 };
+
+export function isDateEqualToToday(dateString) {
+    const inputDate = new Date(dateString);
+    const today = new Date();
+
+    // Extract year, month, and day from input date
+    const inputYear = inputDate.getFullYear();
+    const inputMonth = inputDate.getMonth();
+    const inputDay = inputDate.getDate();
+
+    // Extract year, month, and day from today's date
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+    const currentDay = today.getDate();
+
+    // Compare the date components
+    if (inputYear === currentYear && inputMonth === currentMonth && inputDay === currentDay) {
+        return true;
+    }
+
+    return false;
+}

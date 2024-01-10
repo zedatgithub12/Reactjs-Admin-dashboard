@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Grid, Box, Typography, useTheme, useMediaQuery } from '@mui/material';
+import { Grid, useTheme, useMediaQuery, IconButton, CircularProgress, Box } from '@mui/material';
 import { useQuery } from 'react-query';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
+import { IconArrowLeft } from '@tabler/icons';
 import Connections from 'api';
-import PropTypes from 'prop-types';
-import Logo from 'ui-component/Logo';
 import ItemDetailCard from 'ui-component/items/DetailCard';
 
 const PriceChangeRecords = () => {
+    const navigate = useNavigate();
     const { state } = useLocation();
 
     const theme = useTheme();
@@ -22,7 +22,7 @@ const PriceChangeRecords = () => {
 
     const FetchPriceChanges = () => {
         setLoading(true);
-        var Api = Connections.api + Connections.priceupdate + '/' + state;
+        var Api = Connections.api + Connections.priceupdate + '/' + state.id;
         var headers = {
             accept: 'application/json',
             'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ const PriceChangeRecords = () => {
             sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                minHeight: '100vh',
+                minHeight: '70vh',
                 paddingY: bigDevice && 2,
                 backgroundColor: theme.palette.primary.light
             }}
@@ -82,17 +82,24 @@ const PriceChangeRecords = () => {
                 xl={6}
                 sx={{
                     borderRadius: 2,
-                    boxShadow: 1,
                     backgroundColor: theme.palette.background.default
                 }}
             >
-                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 3 }}>
-                    <Logo />
-                </Grid>
-
                 <Grid container>
                     <Grid item xs={12}>
-                        {data && data.map((item) => <ItemDetailCard key={item} data={item} />)}
+                        {bigDevice && (
+                            <IconButton onClick={() => navigate(-1)} sx={{ margin: 1 }}>
+                                <IconArrowLeft size={22} />
+                            </IconButton>
+                        )}
+
+                        {loading ? (
+                            <Box sx={{ padding: 4, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <CircularProgress size={24} />
+                            </Box>
+                        ) : (
+                            data && data.map((item) => <ItemDetailCard key={item} data={item} />)
+                        )}
                     </Grid>
                 </Grid>
             </Grid>

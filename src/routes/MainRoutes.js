@@ -14,6 +14,10 @@ const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')))
 const AccountSetting = Loadable(lazy(() => import('views/profile/account-setting')));
 const Changepassword = Loadable(lazy(() => import('views/profile/change-password')));
 
+const PriceChange = Loadable(lazy(() => import('views/price-change')));
+const Market = Loadable(lazy(() => import('views/market')));
+const Users = Loadable(lazy(() => import('views/users')));
+
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
 const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
@@ -38,7 +42,7 @@ const MainRoutes = {
     children: [
         {
             path: '/',
-            element: <DashboardDefault />
+            element: <Market />
         },
         {
             path: 'dashboard',
@@ -108,6 +112,11 @@ const MainRoutes = {
         },
 
         {
+            path: 'users',
+            element: <Users />
+        },
+
+        {
             path: 'products',
             element: <Products />
         },
@@ -136,10 +145,17 @@ const MainRoutes = {
             path: 'update-product',
             element: <UpdateProduct />
         },
-
+        {
+            path: 'pricing-changes',
+            element: <PriceChange />
+        },
         {
             path: 'change-records',
             element: <PriceChangeRecords />
+        },
+        {
+            path: 'today-changes',
+            element: <Market />
         }
     ]
 };

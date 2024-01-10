@@ -1,14 +1,23 @@
 import { useState } from 'react';
 import { Box, CircularProgress, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons';
+import { isDateEqualToToday } from 'utils/functions';
+import { useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
 import ItemListingOne from 'ui-component/items/Listing';
+import UpdatePrice from '../update';
+import Connections from 'api';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
 const AllItems = ({ loading, data }) => {
+    const navigate = useNavigate();
     const theme = useTheme();
+
+    const [open, setOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
     const [expand, setExpand] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState(null);
-
+    const [adding, setAdding] = useState(false);
     const handleExapnd = (itemId) => {
         if (itemId === selectedItemId) {
             setExpand(!expand);
@@ -18,27 +27,57 @@ const AllItems = ({ loading, data }) => {
         }
     };
 
-    function isDateEqualToToday(dateString) {
-        const inputDate = new Date(dateString);
-        const today = new Date();
+    const handleClickOpen = (item) => {
+        setSelectedItem(item);
+        setOpen(true);
+    };
 
-        // Extract year, month, and day from input date
-        const inputYear = inputDate.getFullYear();
-        const inputMonth = inputDate.getMonth();
-        const inputDay = inputDate.getDate();
+    const handleClose = () => {
+        setOpen(false);
+    };
 
-        // Extract year, month, and day from today's date
-        const currentYear = today.getFullYear();
-        const currentMonth = today.getMonth();
-        const currentDay = today.getDate();
+    const handleSubmit = (values) => {
+        setAdding(true);
+        // Handle form submission here
+        // Declare the data to be sent to the API
 
-        // Compare the date components
-        if (inputYear === currentYear && inputMonth === currentMonth && inputDay === currentDay) {
-            return true;
-        }
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        const updated_by = user.user.id;
 
-        return false;
-    }
+        var Api = Connections.api + Connections.priceupdate;
+
+        const data = {
+            updated_by: updated_by,
+            item_id: selectedItem.id,
+            oldprice: selectedItem.price,
+            newprice: values.newPrice
+        };
+
+        // Make the API call using fetch()
+        fetch(Api, {
+            method: 'POST',
+            headers: { 'Content-Type': 'appication/json' },
+            body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success) {
+                    handlePrompt(response.message, 'success');
+                    setAdding(false);
+                } else {
+                    handlePrompt(response.message, 'error');
+                    setAdding(false);
+                }
+            })
+            .catch((error) => {
+                handlePrompt(error.message, 'error');
+                setAdding(false);
+            });
+    };
+
+    const handlePrompt = (message, varaint) => {
+        enqueueSnackbar(message, { varaint });
+    };
 
     return (
         <Grid container>
@@ -53,14 +92,20 @@ const AllItems = ({ loading, data }) => {
                         <Box
                             key={index}
                             sx={{
-                                padding: 1,
-                                cursor: 'pointer',
-                                backgroundColor:
-                                    expand && selectedItemId === subCat.id ? theme.palette.grey[100] : theme.palette.primary.light
+                                padding: 0.5,
+                                cursor: 'pointer'
                             }}
                         >
                             <Box
-                                sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    borderRadius: 2,
+                                    padding: 1,
+                                    backgroundColor:
+                                        expand && selectedItemId === subCat.id ? theme.palette.grey[100] : theme.palette.primary.light
+                                }}
                                 onClick={() => handleExapnd(subCat.id)}
                             >
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -91,6 +136,8 @@ const AllItems = ({ loading, data }) => {
                                                 sku={item.sku}
                                                 price={item.price}
                                                 status={item.status}
+                                                onPress={() => navigate('/change-records', { state: { id: item.id } })}
+                                                onUpdate={() => handleClickOpen(item)}
                                             />
                                         ))}
                                 </Box>
@@ -98,12 +145,15 @@ const AllItems = ({ loading, data }) => {
                         </Box>
                     ))
                 )}
+                <SnackbarProvider maxSnack={3} />
             </Grid>
+            <UpdatePrice open={open} handleClose={handleClose} item={selectedItem} handleSubmission={handleSubmit} adding={adding} />
         </Grid>
     );
 };
 
 AllItems.propTypes = {
+    loading: PropTypes.bool,
     data: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 export default AllItems;

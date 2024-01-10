@@ -21,7 +21,7 @@ const PriceChange = () => {
             sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                minHeight: '100vh',
+                minHeight: '80vh',
                 paddingY: bigDevice && 2,
                 backgroundColor: theme.palette.primary.light
             }}
@@ -35,7 +35,8 @@ const PriceChange = () => {
                 xl={6}
                 sx={{
                     borderRadius: 2,
-                    boxShadow: 1,
+                    border: 1,
+                    borderColor: theme.palette.primary[200],
                     backgroundColor: theme.palette.background.default
                 }}
             >
