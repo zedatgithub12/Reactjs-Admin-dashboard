@@ -1,13 +1,13 @@
 const Connections = {
     // url: 'http://localhost:3000',
-    // api: 'http://localhost:8000/api/',
-    // images: 'http://localhost:8000/api/images/',
-    // itempictures: 'http://localhost:8000/api/itempictures/',
+    api: 'http://localhost:8000/api/',
+    images: 'http://localhost:8000/api/images/',
+    itempictures: 'http://localhost:8000/api/itempictures/',
 
     //backend api endpoints
-    api: 'https://service.sheketdelivery.com/api/',
-    images: 'https://service.sheketdelivery.com/api/images/',
-    itempictures: 'https://service.sheketdelivery.com/api/itempictures/',
+    // api: 'https://service.sheketdelivery.com/api/',
+    // images: 'https://service.sheketdelivery.com/api/images/',
+    // itempictures: 'https://service.sheketdelivery.com/api/itempictures/',
 
     signin: 'signin',
     forgotpassword: 'forgotpassword',
@@ -39,7 +39,9 @@ const Connections = {
     subcategory: 'subcategory/',
     viewsubcategory: 'viewsubcategory',
     editsubcategory: 'editsubcategory/',
-    deletesubcategory: 'deletesubcategory/'
+    deletesubcategory: 'deletesubcategory/',
+    sites: 'sites',
+    customers: 'customers'
 };
 
 export default Connections;

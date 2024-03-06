@@ -31,6 +31,12 @@ const AddProduct = Loadable(lazy(() => import('views/products/products/addProduc
 const ViewProduct = Loadable(lazy(() => import('views/products/products/viewProduct')));
 const UpdateProduct = Loadable(lazy(() => import('views/products/products/updateProduct')));
 
+//delivery sites routing
+const Sites = Loadable(lazy(() => import('views/sites')));
+
+// Customers Routing
+const Customers = Loadable(lazy(() => import('views/customer')));
+
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
@@ -156,6 +162,14 @@ const MainRoutes = {
         {
             path: 'today-changes',
             element: <Market />
+        },
+        {
+            path: 'sites',
+            element: <Sites />
+        },
+        {
+            path: 'customers',
+            element: <Customers />
         }
     ]
 };

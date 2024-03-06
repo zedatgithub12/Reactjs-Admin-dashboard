@@ -1,8 +1,17 @@
 // assets
-import { IconDashboard, IconBuildingStore, IconUsers, IconHome, IconClipboardList, IconActivity } from '@tabler/icons';
+import {
+    IconDashboard,
+    IconBuildingStore,
+    IconUsers,
+    IconHome,
+    IconClipboardList,
+    IconActivity,
+    IconZoomMoney,
+    IconMapPins
+} from '@tabler/icons';
 
 // constant
-const icons = { IconDashboard, IconBuildingStore, IconUsers, IconHome, IconClipboardList, IconActivity };
+const icons = { IconDashboard, IconBuildingStore, IconUsers, IconHome, IconClipboardList, IconActivity, IconZoomMoney, IconMapPins };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -21,7 +30,7 @@ const dashboard = {
         },
         {
             id: 'items',
-            title: 'Items',
+            title: 'Products',
             type: 'collapse',
             url: '/products',
             icon: icons.IconClipboardList,
@@ -52,10 +61,26 @@ const dashboard = {
         },
         {
             id: 'pricing-changes',
-            title: 'Item Prices',
+            title: 'Price Changes',
             type: 'item',
             url: '/pricing-changes',
-            icon: icons.IconActivity,
+            icon: icons.IconZoomMoney,
+            breadcrumbs: false
+        },
+        {
+            id: 'sites',
+            title: 'Sites',
+            type: 'item',
+            url: '/sites',
+            icon: icons.IconMapPins,
+            breadcrumbs: true
+        },
+        {
+            id: 'customers',
+            title: 'Customers',
+            type: 'item',
+            url: '/customers',
+            icon: icons.IconBuildingStore,
             breadcrumbs: false
         },
 
