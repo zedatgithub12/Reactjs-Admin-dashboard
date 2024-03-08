@@ -5,11 +5,13 @@ import { useEffect, useState } from 'react';
 import Fallbacks from 'utils/components/Fallbacks';
 import AddSite from './components/AddSite';
 import SiteCard from './components/SiteCard';
+import { useNavigate } from 'react-router';
 
 // ==============================|| SITES PAGE ||============================== //
 
 const Sites = () => {
     const theme = useTheme();
+    const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -68,7 +70,7 @@ const Sites = () => {
     }, [paginationModel.page, paginationModel.pageSize]);
     return (
         <Grid container justifyContent="center">
-            <Grid item xs={11}>
+            <Grid item xs={12} sm={10} md={9} lg={8} xl={7}>
                 <Grid container>
                     <Grid
                         item
@@ -96,13 +98,9 @@ const Sites = () => {
                         xs={12}
                         sx={{
                             display: 'flex',
-
                             backgroundColor: theme.palette.background.default,
-                            padding: 2,
                             borderRadius: 2,
-
-                            marginTop: 1.4,
-                            minHeight: '40dvh'
+                            marginTop: 2.6
                         }}
                     >
                         {loading ? (
@@ -129,7 +127,7 @@ const Sites = () => {
                                     woreda={item.woreda}
                                     starting_address={item.starting_address}
                                     end_address={item.end_address}
-                                    onPress={() => console.log(item)}
+                                    onPress={() => navigate('/site/detail', { state: item })}
                                 />
                             ))
                         )}
@@ -140,6 +138,7 @@ const Sites = () => {
                             count={paginationModel.lastPage}
                             variant="outlined"
                             shape="rounded"
+                            color="primary"
                             sx={{ float: 'right', marginTop: 2 }}
                         />
                     )}

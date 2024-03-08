@@ -9,10 +9,12 @@ export const ActionMenu = ({ children }) => {
     const open = Boolean(anchorEl);
 
     const handleMenuClick = (event) => {
+        event.stopPropagation();
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const handleClose = (event) => {
+        event.stopPropagation();
         setAnchorEl(null);
     };
 
@@ -22,12 +24,12 @@ export const ActionMenu = ({ children }) => {
                 <IconButton
                     onClick={handleMenuClick}
                     size="small"
-                    sx={{ ml: 2 }}
+                    sx={{ ml: 1 }}
                     aria-controls={open ? 'account-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
                 >
-                    <IconDotsVertical color={theme.palette.grey[500]} />
+                    <IconDotsVertical color={theme.palette.grey[500]} size={20} />
                 </IconButton>
             </Tooltip>
 
@@ -41,25 +43,13 @@ export const ActionMenu = ({ children }) => {
                     elevation: 0,
                     sx: {
                         overflow: 'visible',
-                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                        mt: 1.5,
+                        filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.32))',
+                        mt: 0.5,
                         '& .MuiAvatar-root': {
                             width: 32,
                             height: 32,
                             ml: -0.5,
                             mr: 1
-                        },
-                        '&:before': {
-                            content: '""',
-                            display: 'block',
-                            position: 'absolute',
-                            top: 0,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            bgcolor: 'background.paper',
-                            transform: 'translateY(-50%) rotate(45deg)',
-                            zIndex: 0
                         }
                     }
                 }}

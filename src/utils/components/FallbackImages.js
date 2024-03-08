@@ -5,6 +5,7 @@ import error from 'assets/images/error.svg';
 import orders from 'assets/images/orders.svg';
 import market from 'assets/images/market.svg';
 import site from 'assets/images/no_delivery_site.svg';
+import customer from 'assets/images/customer.svg';
 
 const FallbackImages = (severity) => {
     switch (severity) {
@@ -25,6 +26,9 @@ const FallbackImages = (severity) => {
             break;
         case 'site':
             return site;
+            break;
+        case 'customer':
+            return customer;
             break;
         default:
             return emptyBoard;

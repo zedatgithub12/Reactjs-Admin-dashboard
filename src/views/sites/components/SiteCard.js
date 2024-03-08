@@ -10,7 +10,6 @@ const SiteCard = ({ id, name, sub_city, woreda, starting_address, end_address, o
             sm={12}
             md={6}
             lg={4}
-            xl={3}
             sx={{
                 margin: 0.8,
                 padding: 1,
@@ -18,7 +17,7 @@ const SiteCard = ({ id, name, sub_city, woreda, starting_address, end_address, o
                 borderRadius: 3,
                 borderColor: theme.palette.grey[200],
                 cursor: 'pointer',
-                ':hover': { boxShadow: 1 }
+                ':hover': { borderColor: theme.palette.grey[300] }
             }}
             onClick={onPress}
         >
@@ -30,7 +29,7 @@ const SiteCard = ({ id, name, sub_city, woreda, starting_address, end_address, o
                     padding: 4,
                     paddingY: 6,
                     borderRadius: 2,
-                    backgroundColor: theme.palette.secondary.light,
+                    backgroundColor: theme.palette.primary.light,
                     marginBottom: 1
                 }}
             >
