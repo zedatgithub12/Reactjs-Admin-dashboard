@@ -63,9 +63,48 @@ const OrderDetail = () => {
         setOpen(false);
     };
 
-    const handleDateAssignment = (event, date) => {
-        event.stopPropagation();
-        setSelectedDate(date);
+    const TimeFormatter = (date) => {
+        const dateStr = date;
+        const dateObj = new Date(dateStr);
+        const dateWithoutOffset = new Date(dateObj.getTime() - dateObj.getTimezoneOffset() * 60000); // Remove timezone offset
+
+        const formattedDate = dateWithoutOffset.toISOString().slice(0, 19).replace('T', ' '); // Format date string without timezone offset
+
+        return formattedDate;
+    };
+
+    const handleDateAssignment = () => {
+        const token = localStorage.getItem('token');
+        const Api = Connections.api + Connections.orders + `/${state.id}`;
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            accept: 'application/json',
+            'Content-Type': 'application/json'
+        };
+
+        const data = {
+            delivery_date: TimeFormatter(selectedDate)
+        };
+
+        fetch(Api, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success) {
+                    handlePrompt(response.message, 'success');
+                    setOpen(false);
+                } else {
+                    handlePrompt(response.message, 'error');
+                    setOpen(false);
+                }
+            })
+            .catch((error) => {
+                handlePrompt(error.message, 'error');
+                setOpen(false);
+            });
     };
 
     useEffect(() => {
@@ -229,7 +268,7 @@ const OrderDetail = () => {
                                         <Grid item xs={12} sm={6} md={6} lg={3} sx={{ mt: 1 }}>
                                             {state?.delivery_date ? (
                                                 <Typography variant="subtitle1" color="primary">
-                                                    {state?.delivery_date}
+                                                    {DateFormatter(state?.delivery_date)}
                                                 </Typography>
                                             ) : (
                                                 <Button variant="contained" onClick={handleOpen}>
@@ -274,7 +313,13 @@ const OrderDetail = () => {
                 )}
             </Grid>
 
-            <DeliveryDatePicker open={open} handleClose={handleClose} selectedDate={selectedDate} handleSelection={handleDateAssignment} />
+            <DeliveryDatePicker
+                open={open}
+                handleClose={handleClose}
+                selectedDate={selectedDate}
+                handleSelection={(date) => setSelectedDate(date)}
+                handleSubmission={handleDateAssignment}
+            />
             <SnackbarProvider />
         </Grid>
     );

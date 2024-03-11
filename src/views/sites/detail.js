@@ -70,8 +70,8 @@ const SiteDetails = () => {
             const token = sessionStorage.getItem('token');
             const Api =
                 Connections.api +
-                Connections.customers +
-                `?site=${state.id}&page=${paginationModel.page}&limit=${paginationModel.pageSize}`;
+                Connections.sites +
+                `/customers?site=${state.id}&page=${paginationModel.page}&limit=${paginationModel.pageSize}`;
             const headers = {
                 Authorization: `Bearer ${token}`,
                 accept: 'application/json',

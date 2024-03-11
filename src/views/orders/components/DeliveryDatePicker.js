@@ -1,35 +1,43 @@
-import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
+import React from 'react';
+import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 
-const DeliveryDatePicker = ({ open, handleClose, selectedDate, handleSelection }) => {
-    const handleDateChange = (event, date) => {
-        handleSelection(event, date);
+const DeliveryDatePicker = ({ open, handleClose, selectedDate, handleSelection, handleSubmission }) => {
+    const handleDateChange = (date) => {
+        handleSelection(date);
     };
 
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Select a Delivery Date</DialogTitle>
+                <DialogTitle variant="h4">Select Order Delivery Date</DialogTitle>
                 <DialogContent>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <StaticDatePicker
                             label="Choose a Date"
+                            defaultValue={dayjs('2024-01-01')}
                             value={selectedDate}
                             onChange={handleDateChange}
-                            renderInput={(params) => <TextField {...params} />}
+                            onAccept={handleSubmission}
+                            onCancel={handleClose}
                         />
                     </LocalizationProvider>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Ok</Button>
-                </DialogActions>
             </Dialog>
         </div>
     );
+};
+
+DeliveryDatePicker.propTypes = {
+    open: PropTypes.bool,
+    handleClose: PropTypes.func,
+    selectedDate: PropTypes.string,
+    handleSelection: PropTypes.func,
+    handleSubmission: PropTypes.func
 };
 
 export default DeliveryDatePicker;

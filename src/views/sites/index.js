@@ -22,6 +22,7 @@ const Sites = () => {
         total: 0,
         lastPage: 1
     });
+
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {

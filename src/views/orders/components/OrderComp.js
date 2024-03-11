@@ -2,6 +2,7 @@ import { Grid, MenuItem, Typography, useTheme } from '@mui/material';
 import { IconTruckDelivery, IconX } from '@tabler/icons';
 import PropTypes from 'prop-types';
 import VerticalDotOption from 'ui-component/VerticalDotOption';
+import { DateFormatter } from 'utils/functions';
 
 const Options = [{ name: 'cancel', title: 'Cancel order', icon: <IconX size={16} /> }];
 
@@ -66,7 +67,7 @@ const OrderComp = ({ orderID, orderDate, orderStatus, totalPayment, deliveryDate
                     </Grid>
 
                     <Grid xs={6}>
-                        <Typography variant="subtitle1">{deliveryDate ? deliveryDate : 'Unsigned'}</Typography>
+                        <Typography variant="subtitle1">{deliveryDate ? DateFormatter(deliveryDate) : 'Unsigned'}</Typography>
                         <Typography variant="subtitle2">Delivery date</Typography>
                     </Grid>
                 </Grid>
