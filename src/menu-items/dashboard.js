@@ -7,11 +7,22 @@ import {
     IconClipboardList,
     IconActivity,
     IconZoomMoney,
-    IconMapPins
+    IconMapPins,
+    IconShoppingBag
 } from '@tabler/icons';
 
 // constant
-const icons = { IconDashboard, IconBuildingStore, IconUsers, IconHome, IconClipboardList, IconActivity, IconZoomMoney, IconMapPins };
+const icons = {
+    IconDashboard,
+    IconBuildingStore,
+    IconUsers,
+    IconHome,
+    IconClipboardList,
+    IconActivity,
+    IconZoomMoney,
+    IconMapPins,
+    IconShoppingBag
+};
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -85,21 +96,20 @@ const dashboard = {
         },
 
         {
+            id: 'orders',
+            title: 'Orders',
+            type: 'item',
+            url: '/orders',
+            icon: icons.IconShoppingBag,
+            breadcrumbs: false
+        },
+        {
             id: 'users',
             title: 'Users',
-            type: 'collapse',
+            type: 'item',
             url: '/users',
             icon: icons.IconUsers,
-            breadcrumbs: false,
-            children: [
-                {
-                    id: 'admins',
-                    title: 'Admin',
-                    type: 'item',
-                    url: '/users',
-                    breadcrumbs: false
-                }
-            ]
+            breadcrumbs: false
         }
     ]
 };

@@ -93,45 +93,34 @@ const Sites = () => {
                     </Grid>
                 </Grid>
                 <Grid container>
-                    <Grid
-                        item
-                        xs={12}
-                        sx={{
-                            display: 'flex',
-                            backgroundColor: theme.palette.background.default,
-                            borderRadius: 2,
-                            marginTop: 2.6
-                        }}
-                    >
-                        {loading ? (
-                            <Grid container sx={{ justifyContent: 'center' }}>
-                                <Grid item xs={8} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 4 }}>
-                                    <CircularProgress size={22} />
-                                </Grid>
+                    {loading ? (
+                        <Grid container sx={{ justifyContent: 'center' }}>
+                            <Grid item xs={8} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 4 }}>
+                                <CircularProgress size={22} />
                             </Grid>
-                        ) : error ? (
-                            <Fallbacks severity="error" title="ooops" description="There is error fetching sites" />
-                        ) : site.length == 0 ? (
-                            <Fallbacks
-                                severity="site"
-                                title="No delivery site"
-                                description="There is no added site yet, they will be here soon"
+                        </Grid>
+                    ) : error ? (
+                        <Fallbacks severity="error" title="ooops" description="There is error fetching sites" />
+                    ) : site.length == 0 ? (
+                        <Fallbacks
+                            severity="site"
+                            title="No delivery site"
+                            description="There is no added site yet, they will be here soon"
+                        />
+                    ) : (
+                        site?.map((item, index) => (
+                            <SiteCard
+                                key={index}
+                                id={item.id}
+                                name={item.name}
+                                sub_city={item.sub_city}
+                                woreda={item.woreda}
+                                starting_address={item.starting_address}
+                                end_address={item.end_address}
+                                onPress={() => navigate('/site/detail', { state: item })}
                             />
-                        ) : (
-                            site?.map((item, index) => (
-                                <SiteCard
-                                    key={index}
-                                    id={item.id}
-                                    name={item.name}
-                                    sub_city={item.sub_city}
-                                    woreda={item.woreda}
-                                    starting_address={item.starting_address}
-                                    end_address={item.end_address}
-                                    onPress={() => navigate('/site/detail', { state: item })}
-                                />
-                            ))
-                        )}
-                    </Grid>
+                        ))
+                    )}
 
                     {paginationModel.lastPage > 1 && (
                         <Pagination

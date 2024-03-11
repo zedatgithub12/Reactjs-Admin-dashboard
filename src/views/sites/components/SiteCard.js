@@ -8,7 +8,7 @@ const SiteCard = ({ id, name, sub_city, woreda, starting_address, end_address, o
             item
             xs={12}
             sm={12}
-            md={6}
+            md={5.8}
             lg={4}
             sx={{
                 margin: 0.8,

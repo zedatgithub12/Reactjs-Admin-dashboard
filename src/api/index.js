@@ -41,7 +41,9 @@ const Connections = {
     editsubcategory: 'editsubcategory/',
     deletesubcategory: 'deletesubcategory/',
     sites: 'sites',
-    customers: 'customers'
+    customers: 'customers',
+    orders: 'orders',
+    orderItem: 'order-item'
 };
 
 export default Connections;

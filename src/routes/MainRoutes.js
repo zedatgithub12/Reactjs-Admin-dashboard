@@ -39,6 +39,9 @@ const SiteDetails = Loadable(lazy(() => import('views/sites/detail')));
 const Customers = Loadable(lazy(() => import('views/customer')));
 const ViewCustomer = Loadable(lazy(() => import('views/customer/view')));
 
+//Orders Routing
+const Orders = Loadable(lazy(() => import('views/orders')));
+const OrderDetail = Loadable(lazy(() => import('views/orders/details')));
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
@@ -180,6 +183,14 @@ const MainRoutes = {
         {
             path: 'customer/detail',
             element: <ViewCustomer />
+        },
+        {
+            path: 'orders',
+            element: <Orders />
+        },
+        {
+            path: 'order/detail',
+            element: <OrderDetail />
         }
     ]
 };
