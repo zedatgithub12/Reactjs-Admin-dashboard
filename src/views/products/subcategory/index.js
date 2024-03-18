@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 // material-ui
 import {
     Typography,
     Grid,
     Box,
     Divider,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
     IconButton,
     Dialog,
     DialogTitle,
@@ -30,40 +26,19 @@ import {
     CircularProgress,
     useTheme
 } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
 import { Search } from '@mui/icons-material';
-import { IconTrash, IconEdit } from '@tabler/icons';
-// project imports
-import MainCard from 'ui-component/cards/MainCard';
-// import CategoryData from 'data/category';
+import { IconTrash, IconEdit, IconPhoto } from '@tabler/icons';
 import { gridSpacing } from 'store/constant';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
+import MainCard from 'ui-component/cards/MainCard';
 import Connections from 'api';
 import AddSubCategory from './components/add';
+import Placeholder from 'ui-component/Placeholder';
 
 // ==============================|| CATEGORY PAGE ||============================== //
 
-const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 const SubCategories = () => {
     const theme = useTheme();
-
-    const [popup, setPopup] = useState({
-        status: false,
-        severity: 'info',
-        message: ''
-    });
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setPopup({
-            ...popup,
-            status: false
-        });
-    };
 
     //category data
     const [mainCategories, setMainCategories] = useState([]);
@@ -72,11 +47,11 @@ const SubCategories = () => {
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [addCategory, setAddCategory] = useState('');
-    const [mainCatId, setMainCatId] = useState();
-    const [addCategoryDesc, setAddCategoryDesc] = useState('');
     const [newCategoryName, setNewCategoryName] = useState('');
     const [newCategoryDesc, setNewCategoryDesc] = useState('');
+    const [productPicture, setProductPicture] = useState(null);
+    const [picturePreview, setPicturePreview] = useState(null);
+    const [mainCatId, setMainCatId] = useState();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState('');
@@ -114,93 +89,35 @@ const SubCategories = () => {
         setAddDialogOpen(false);
     };
 
-    const handleMainCategory = (value) => {
-        setAddCategory(value.name);
-        setMainCatId(value.id);
-    };
-
     const handleMainCategoryUpdate = (value) => {
-        setNewCategoryName(value.id);
-    };
-
-    const addNewCategory = () => {
-        if (addCategory === '') {
-            setPopup({
-                ...popup,
-                status: true,
-                severity: 'error',
-                message: 'Please select main category'
-            });
-        } else if (addCategoryDesc === '') {
-            setPopup({
-                ...popup,
-                status: true,
-                severity: 'error',
-                message: 'Please enter sub category name'
-            });
-        } else {
-            setSpinner(true);
-            var Api = Connections.api + Connections.sub_cat;
-            var headers = {
-                accept: 'application/json',
-                'Content-Type': 'application/json'
-            };
-
-            const data = {
-                main_category_id: mainCatId,
-                name: addCategoryDesc
-            };
-
-            // Make the API call using fetch()
-            fetch(Api, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(data)
-            })
-                .then((response) => response.json())
-                .then((response) => {
-                    if (response.success) {
-                        setPopup({
-                            ...popup,
-                            status: true,
-                            severity: 'success',
-                            message: response.message
-                        });
-                        setSpinner(false);
-                        setCategoryData(CategoryData);
-                        handleAddDialogClose();
-                    } else {
-                        setPopup({
-                            ...popup,
-                            status: true,
-                            severity: 'error',
-                            message: response.message
-                        });
-                        setSpinner(false);
-                    }
-                })
-                .catch(() => {
-                    setPopup({
-                        ...popup,
-                        status: true,
-                        severity: 'error',
-                        message: 'There is error adding category!'
-                    });
-                    setSpinner(false);
-                });
-        }
+        setNewCategoryName(value.name);
+        setMainCatId(value.id);
     };
 
     const handleEditDialogOpen = (category) => {
         setSelectedCategory(category);
-        setNewCategoryName(category.main_category.id);
+        setNewCategoryName(category.main_category.name);
+        setMainCatId(category.main_category.id);
         setNewCategoryDesc(category.name);
         setEditDialogOpen(true);
+    };
+
+    const handlePictureChange = (event) => {
+        const file = event.target.files[0];
+        setProductPicture(file);
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                setPicturePreview(reader.result);
+            };
+        }
     };
 
     const handleEditDialogClose = () => {
         setSelectedCategory(null);
         setNewCategoryName('');
+        setMainCatId(null);
         setNewCategoryDesc('');
         setEditDialogOpen(false);
     };
@@ -217,51 +134,32 @@ const SubCategories = () => {
 
     const handleEditCategory = () => {
         setSpinner(true);
-        var Api = Connections.api + Connections.sub_cat + '/' + selectedCategory.id;
-        var headers = {
-            accept: 'application/json',
-            'Content-Type': 'application/json'
-        };
+        const Api = Connections.api + Connections.sub_cat + '/' + selectedCategory.id;
 
-        const data = {
-            main_category_id: newCategoryName,
-            name: newCategoryDesc
-        };
+        const data = new FormData();
+        data.append('main_category_id', mainCatId);
+        data.append('image', productPicture);
+        data.append('name', newCategoryDesc);
 
         // Make the API call using fetch()
         fetch(Api, {
             method: 'POST',
-            headers: headers,
-            body: JSON.stringify(data)
+            body: data
         })
             .then((response) => response.json())
             .then((response) => {
                 if (response.success) {
-                    setPopup({
-                        ...popup,
-                        status: true,
-                        severity: 'success',
-                        message: response.message
-                    });
+                    handlePrompt(response.message, 'success');
                     setSpinner(false);
                     handleEditDialogClose();
+                    getSubCatgeory();
                 } else {
-                    setPopup({
-                        ...popup,
-                        status: true,
-                        severity: 'error',
-                        message: response.message
-                    });
+                    handlePrompt(response.message, 'error');
                     setSpinner(false);
                 }
             })
-            .catch(() => {
-                setPopup({
-                    ...popup,
-                    status: true,
-                    severity: 'error',
-                    message: 'There is error adding category!'
-                });
+            .catch((error) => {
+                handlePrompt(error.message, 'error');
                 setSpinner(false);
             });
     };
@@ -283,32 +181,18 @@ const SubCategories = () => {
             .then((response) => response.json())
             .then((response) => {
                 if (response.success) {
-                    setPopup({
-                        ...popup,
-                        status: true,
-                        severity: 'success',
-                        message: response.message
-                    });
+                    handlePrompt(response.message, 'success');
                     setCategoryData(CategoryData);
-                    setSpinner(false);
                     handleDeleteDialogClose();
+                    setSpinner(false);
+                    getSubCatgeory();
                 } else {
-                    setPopup({
-                        ...popup,
-                        status: true,
-                        severity: 'error',
-                        message: response.message
-                    });
+                    handlePrompt(response.message, 'error');
                     setSpinner(false);
                 }
             })
-            .catch(() => {
-                setPopup({
-                    ...popup,
-                    status: true,
-                    severity: 'error',
-                    message: 'There is error adding category!'
-                });
+            .catch((error) => {
+                handlePrompt(error.message, 'success');
                 setSpinner(false);
             });
     };
@@ -324,6 +208,35 @@ const SubCategories = () => {
     const handleSearchTermChange = (event) => {
         setSearchTerm(event.target.value);
         setPage(0);
+    };
+
+    const getSubCatgeory = () => {
+        setLoading(true);
+        var Api = Connections.api + Connections.sub_cat;
+        var headers = {
+            accept: 'application/json',
+            'Content-Type': 'application/json'
+        };
+        // Make the API call using fetch()
+        fetch(Api, {
+            method: 'GET',
+            headers: headers,
+            cache: 'no-cache'
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success) {
+                    setCategoryData(response.data);
+                    setLoading(false);
+                } else {
+                    handlePrompt(response.message, 'error');
+                    setLoading(false);
+                }
+            })
+            .catch((error) => {
+                handlePrompt(error.message, 'error');
+                setLoading(false);
+            });
     };
 
     //useffect which fetches list of categories when component get mounted
@@ -344,15 +257,12 @@ const SubCategories = () => {
                 .then((response) => {
                     if (response.success) {
                         setMainCategories(response.data);
+                    } else {
+                        handlePrompt(response.message, 'error');
                     }
                 })
                 .catch(() => {
-                    setPopup({
-                        ...popup,
-                        status: true,
-                        severity: 'error',
-                        message: 'There is error fetching categories!'
-                    });
+                    handlePrompt(error.message, 'error');
                 });
         };
 
@@ -374,15 +284,13 @@ const SubCategories = () => {
                     if (response.success) {
                         setCategoryData(response.data);
                         setLoading(false);
+                    } else {
+                        setLoading(false);
+                        handlePrompt(response.message, 'error');
                     }
                 })
-                .catch(() => {
-                    setPopup({
-                        ...popup,
-                        status: true,
-                        severity: 'error',
-                        message: 'There is error featching category!'
-                    });
+                .catch((error) => {
+                    handlePrompt(error.message, 'error');
                     setLoading(false);
                 });
         };
@@ -390,6 +298,10 @@ const SubCategories = () => {
         getSubCatgeory();
         return () => {};
     }, []);
+
+    const handlePrompt = (message, severity) => {
+        enqueueSnackbar(message, { variant: severity });
+    };
 
     const filteredCategories = filteredData.filter((category) => category.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
@@ -455,7 +367,7 @@ const SubCategories = () => {
                                 <Table>
                                     <TableHead sx={{ backgroundColor: theme.palette.primary.dark, borderRadius: 2 }}>
                                         <TableRow>
-                                            <TableCell sx={{ color: theme.palette.background.default }}>No</TableCell>
+                                            <TableCell sx={{ color: theme.palette.background.default }}>Picture</TableCell>
                                             <TableCell sx={{ color: theme.palette.background.default }}>Main Category</TableCell>
                                             <TableCell sx={{ color: theme.palette.background.default }}>Sub Category</TableCell>
                                             <TableCell sx={{ color: theme.palette.background.default }}>Action</TableCell>
@@ -474,7 +386,25 @@ const SubCategories = () => {
                                         <TableBody>
                                             {categoriesToShow.map((category, index) => (
                                                 <TableRow key={index}>
-                                                    <TableCell>{index + 1}</TableCell>
+                                                    <TableCell>
+                                                        {category.image ? (
+                                                            <img
+                                                                src={Connections.itempictures + category.image}
+                                                                alt="sub category"
+                                                                style={{
+                                                                    width: 60,
+                                                                    height: 60,
+                                                                    background: theme.palette.grey[100],
+                                                                    aspectRatio: 1,
+                                                                    objectFit: 'contain',
+                                                                    borderRadius: 8,
+                                                                    padding: 2
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <Placeholder />
+                                                        )}
+                                                    </TableCell>
                                                     <TableCell>{category.main_category.name}</TableCell>
                                                     <TableCell>{category.name}</TableCell>
 
@@ -505,46 +435,71 @@ const SubCategories = () => {
                 </Grid>
             </MainCard>
 
-            <Dialog open={addDialogOpen} onClose={handleAddDialogClose} sx={{ minWidth: 300 }}>
-                <DialogTitle variant="h4">Create Sub Category</DialogTitle>
-
-                <DialogContent>
-                    <Autocomplete
-                        options={mainCategories}
-                        getOptionLabel={(option) => option.name}
-                        onChange={(event, value) => {
-                            if (value) {
-                                handleMainCategory(value);
-                            }
-                        }}
-                        renderInput={(params) => (
-                            <TextField {...params} margin="dense" label="Main Category" variant="outlined" fullWidth required />
-                        )}
-                    />
-                    <TextField
-                        margin="dense"
-                        label="Sub Category"
-                        color="primary"
-                        value={addCategoryDesc}
-                        onChange={(e) => setAddCategoryDesc(e.target.value)}
-                        fullWidth
-                        required
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleAddDialogClose} color="primary">
-                        Cancel
-                    </Button>
-
-                    <Button onClick={() => addNewCategory()} color="primary" variant="contained" sx={{ paddingX: 4 }}>
-                        {spinner ? <CircularProgress size={20} color="primary" /> : 'Save'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-            <Dialog open={editDialogOpen} onClose={handleEditDialogClose}>
+            <Dialog open={editDialogOpen} onClose={handleEditDialogClose} fullWidth>
                 <DialogTitle variant="h4">Edit Sub Category</DialogTitle>
                 <DialogContent>
+                    <Grid
+                        item
+                        xs={12}
+                        sx={{
+                            display: 'flex',
+                            backgroundColor: theme.palette.primary.light,
+                            borderRadius: 2
+                        }}
+                    >
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handlePictureChange}
+                            style={{ display: 'none' }}
+                            id="product-picture"
+                        />
+                        <label htmlFor="product-picture">
+                            <div
+                                style={{
+                                    width: 200,
+                                    height: 200,
+                                    border: 1,
+                                    borderStyle: 'solid',
+                                    borderRadius: 10,
+                                    borderColor: theme.palette.grey[400],
+                                    backgroundColor: theme.palette.primary.light,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                {picturePreview ? (
+                                    <img
+                                        src={picturePreview}
+                                        alt="sub category"
+                                        style={{ width: '100%', aspectRatio: 1, objectFit: 'cover', borderRadius: 6 }}
+                                    />
+                                ) : selectedCategory?.image ? (
+                                    <img
+                                        src={Connections.itempictures + selectedCategory.image}
+                                        alt="sub category"
+                                        style={{ width: '100%', aspectRatio: 1, objectFit: 'cover', borderRadius: 6 }}
+                                    />
+                                ) : (
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <IconPhoto size={44} />
+                                        <Typography variant="body1" color="primary" fullWidth style={{ height: '100%', marginTop: 6 }}>
+                                            Upload picture
+                                        </Typography>
+                                    </Box>
+                                )}
+                            </div>
+                        </label>
+                    </Grid>
                     <Autocomplete
                         options={mainCategories}
                         getOptionLabel={(option) => option.name}
@@ -555,7 +510,7 @@ const SubCategories = () => {
                             }
                         }}
                         renderInput={(params) => (
-                            <TextField {...params} margin="dense" label="Main Category" variant="outlined" fullWidth required />
+                            <TextField {...params} margin="dense" label="Main Category" variant="outlined" fullWidth />
                         )}
                     />
                     <TextField
@@ -591,14 +546,15 @@ const SubCategories = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-            {/* 
-            <AddSubCategory open={addDialogOpen} handleClose={handleAddDialogClose} /> */}
 
-            <Snackbar open={popup.status} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity={popup.severity} sx={{ width: '100%' }}>
-                    {popup.message}
-                </Alert>
-            </Snackbar>
+            <AddSubCategory
+                open={addDialogOpen}
+                mainCategories={mainCategories}
+                handleClose={handleAddDialogClose}
+                onAdded={getSubCatgeory}
+            />
+
+            <SnackbarProvider maxSnack={3} />
         </>
     );
 };

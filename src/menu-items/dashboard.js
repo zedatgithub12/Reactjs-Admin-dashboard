@@ -6,7 +6,7 @@ import {
     IconHome,
     IconClipboardList,
     IconActivity,
-    IconZoomMoney,
+    IconDeviceAnalytics,
     IconMapPins,
     IconShoppingBag
 } from '@tabler/icons';
@@ -19,7 +19,7 @@ const icons = {
     IconHome,
     IconClipboardList,
     IconActivity,
-    IconZoomMoney,
+    IconDeviceAnalytics,
     IconMapPins,
     IconShoppingBag
 };
@@ -75,7 +75,7 @@ const dashboard = {
             title: 'Price Changes',
             type: 'item',
             url: '/pricing-changes',
-            icon: icons.IconZoomMoney,
+            icon: icons.IconDeviceAnalytics,
             breadcrumbs: false
         },
         {

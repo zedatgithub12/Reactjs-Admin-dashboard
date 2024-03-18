@@ -97,7 +97,7 @@ const Customization = () => {
                     onClick={handleToggle}
                     size="medium"
                     variant="circular"
-                    color="secondary"
+                    color={theme.palette.primary.dark}
                     sx={{
                         borderRadius: 0,
                         borderTopLeftRadius: '50%',
@@ -192,10 +192,10 @@ const Customization = () => {
                                             step={2}
                                             min={4}
                                             max={24}
-                                            color="secondary"
+                                            color="primary"
                                             sx={{
                                                 '& .MuiSlider-valueLabel': {
-                                                    color: 'secondary.light'
+                                                    color: 'primary[200]'
                                                 }
                                             }}
                                         />
