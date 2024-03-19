@@ -41,6 +41,7 @@ const Connections = {
     editsubcategory: 'editsubcategory/',
     deletesubcategory: 'deletesubcategory/',
     sites: 'sites',
+    deliveryschedules: 'delivery-schedules',
     customers: 'customers',
     orders: 'orders',
     orderItem: 'order-item'

@@ -9,7 +9,7 @@ const Placeholder = () => {
     return (
         <img
             src={sheketplaceholder}
-            alt="sheket delivery"
+            alt="sheket"
             style={{
                 width: 60,
                 height: 60,

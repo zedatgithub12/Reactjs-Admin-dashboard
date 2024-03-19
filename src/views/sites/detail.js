@@ -8,6 +8,7 @@ import Fallbacks from 'utils/components/Fallbacks';
 import { ActionMenu } from 'ui-component/menu/action';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import EditSite from './components/EditSite';
+import DeliveryDates from './components/DeliveryDates';
 
 const SiteDetails = () => {
     const theme = useTheme();
@@ -102,8 +103,8 @@ const SiteDetails = () => {
     }, [paginationModel.page, paginationModel.pageSize]);
 
     return (
-        <Grid container justifyContent="center">
-            <Grid item xs={12} sm={10} md={9} lg={8} xl={7}>
+        <Grid container sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-evenly' }}>
+            <Grid item xs={12} sm={12} md={9} lg={8} xl={7}>
                 <Grid container>
                     <Grid
                         item
@@ -115,6 +116,7 @@ const SiteDetails = () => {
                             alignItems: 'center',
                             backgroundColor: theme.palette.background.default,
                             padding: 2,
+                            marginTop: 1,
                             borderRadius: 2,
                             border: 0.5,
                             borderColor: theme.palette.grey[200]
@@ -303,6 +305,9 @@ const SiteDetails = () => {
                         />
                     )}
                 </Grid>
+            </Grid>
+            <Grid item xs={12} sm={12} md={3} lg={3.6} xl={3.6}>
+                <DeliveryDates />
             </Grid>
             <EditSite open={open} handleClose={handleClose} site={state} />
             <SnackbarProvider maxSnack={3} />
