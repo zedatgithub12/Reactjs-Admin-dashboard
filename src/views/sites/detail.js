@@ -9,6 +9,7 @@ import { ActionMenu } from 'ui-component/menu/action';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import EditSite from './components/EditSite';
 import DeliveryDates from './components/DeliveryDates';
+import SheketPoper from 'ui-component/popups/SheketPoper';
 
 const SiteDetails = () => {
     const theme = useTheme();
@@ -307,7 +308,7 @@ const SiteDetails = () => {
                 </Grid>
             </Grid>
             <Grid item xs={12} sm={12} md={3} lg={3.6} xl={3.6}>
-                <DeliveryDates />
+                <DeliveryDates site={state && state} />
             </Grid>
             <EditSite open={open} handleClose={handleClose} site={state} />
             <SnackbarProvider maxSnack={3} />

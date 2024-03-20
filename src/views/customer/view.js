@@ -181,7 +181,7 @@ const ViewCustomer = () => {
                                 >
                                     <IconButton
                                         sx={{ marginRight: 1.4, backgroundColor: theme.palette.grey[50], zIndex: 2 }}
-                                        onClick={() => navigate('/customers')}
+                                        onClick={() => navigate(-1)}
                                     >
                                         <IconArrowLeft size={18} />
                                     </IconButton>
